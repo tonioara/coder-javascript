@@ -1,5 +1,6 @@
-let car=0;
+let totalCar=0;
 let carrito=[];
+let catalogoHamburguesas=[];
 let ingreso=false
 let bandera=true;
 let banderahambur=true;
@@ -9,10 +10,68 @@ let agregarCarrito;
 const user = 'tonioara'
 let cantidadDeIntentos = 3;
 
+function crearHamburguesa(nombreHam,/*panHam,carnesHam,ingredientesHam,*/ precioHam) {
+	const hamburAgregar = {
+		nombre: nombreHam,
+       /* panes: panHam,
+        carnes: carnesHam,
+        ingredientes: ingredientesHam,*/
+        precio: precioHam,
+	}
 
+	catalogoHamburguesas.push(hamburAgregar)
+}
+function verHamburguesas() {
+	if (catalogoHamburguesas.length == 0) {
+		alert('No hay productos')
+		return
+	}
+
+	let mensaje = 'Los productos son:\n '
+     let a=1;
+	for (let i = 0; i < catalogoHamburguesas.length; i++) {
+       
+		mensaje += `\n${a++}) ${catalogoHamburguesas[i].nombre}- $ ${catalogoHamburguesas[i].precio}`
+	}
+
+	alert(mensaje)
+}
+function nombresHamburguesas(){
+     const productosXNombre=[]
+    for(i=0; i<catalogoHamburguesas.length; i++){
+        productosXNombre.push(catalogoHamburguesas[i].nombre)
+    }
+    return productosXNombre;
+
+}
+function buscarPorNombre(productoABuscar){
+    const nombreProducto=nombresHamburguesas();
+
+    let index= nombreProducto.indexOf(productoABuscar);
+    console.log(index);
+    if(index=== -1){
+        alert('Esta hamburguesa no esta en nuestro catalogo\n Por favor revise nuestro catalogo \n');
+    }else{
+        carrito.push(catalogoHamburguesas[index]);
+    }
+}
+
+const verCarrito = ()=>{
+    let mensaje= 'Usted tiene en el carrito estos productos: '
+    let totalCar=0;
+
+    for(i=0; i<carrito.length;i++){
+        totalCar+= Number(carrito[i].precio);
+    }
+    for(i=0; i<carrito.length;i++){
+        mensaje += `\n\n* ${carrito[i].nombre} $ ${carrito[i].precio}`
+    }
+    mensaje+=`\n El total es $ ${totalCar}`;
+    alert(mensaje);
+}
 function checkUser(userLogin,userPassword){
     for(i=0; i<cantidadDeIntentos; i++){
-    let contrasenaIngresada="";
+    
 
     if(userLogin=== null || userPassword === null){
         alert("Los datos son vacios \n Porfavor ingrese sus datos de nuevo")
@@ -31,18 +90,25 @@ function checkUser(userLogin,userPassword){
     return ingreso
 }
 function menu(){
-    let opMenu= Number(prompt("Bienvenido a BurguerHouse!! \n\n Elija la opcion que desea \n\n 1- Ver Catalago de hamburguesas \n 2- Ver Carrito \n 5-Salir "));
+    let opMenu= Number(prompt("Bienvenido a BurguerHouse!! \n\n Elija la opcion que desea \n\n 1- Agregar hambuergas al catalogo \n 2- Ver Carrito \n 3-  Agregar Hamburguesas al carrito  \n 4 ver Catalogo de Hamburguesas-\n 5-Salir "));
     alert(opMenu);
     return opMenu;
     
-}
+}/*
 function catalogoBurguers(){
-    let numBur= Number(prompt('Este es nuestro menu de hamburguesas: \n 1- [Hamburguesa simple]\n 2-[Hamburguesa Doble]\n 3-[Hamburguesa triple]\n 4- [Ver Carrito]\n 5- [Salir]\n'))
+    let mensaje= 'Las hamburguesas en nuestro catalogo son :'
+    for (let i = 0; i < catalogoHamburguesas.length; i++) {
+        let numero= 0;
+	mensaje += `\n${numero+1}) ${catalogoHamburguesas[i].nombre}-\n $ ${catalogoHamburguesas[i].precio}`
+  }
+    let numBur= Number(prompt('Elija el numero correspodiente a la hamburguesa que desea agregar'))
     return numBur;
-}
+}*/
+/*
 function agregrarHambuguersa(numBur){
+
+     if(numBur)
     if (numBur===1){
-        let hamb1=250;
         alert('HAMBURGUESA SIMPLE, PAN, CARNE, LECHUGA, TOMATE Y HUEVO\n\n Precio= $250');
         agregarCarrito= confirm('Desea agregar esta hamburguesa al carrito?')
             if(agregarCarrito==true){
@@ -52,7 +118,6 @@ function agregrarHambuguersa(numBur){
             alert(`El total de su compra es ${car}`)
             }
     }else if(numBur===2){
-        let hamb2=300
         alert('HAMBURGUESA DOBLE, PAN, CARNE X2, PANCETA, SALSA DE LA CASA');
         agregarCarrito=confirm('Desea agregar esta hamburguesa al carrito?')
         if(agregarCarrito==true){
@@ -72,7 +137,7 @@ function agregrarHambuguersa(numBur){
            alert(`El total de su compra es ${car}`)
          }
       }    
-}
+}*/
 
 
 let userLogin = prompt('Cual es el user');
@@ -90,34 +155,23 @@ if(credencial){
         
         switch (opcionMenu) {
             case 1:
-                while(banderahambur){
-                    let numBur=catalogoBurguers()
-                    alert(numBur);
-                        switch (numBur) {
-                             case 1:
-                                agregrarHambuguersa(numBur);
-                                break;
-                             case 2:
-                                agregrarHambuguersa(numBur);
-                               break; 
-                             case 3:
-                                agregrarHambuguersa(numBur);
-                                break; 
-                             case 4:          
-                              alert(carrito+`\n\n El total de su compra es de $ ${car}\n\n`)
-                                   break;  
-                             case 5:
-                                banderahambur=false;
-                                break;
-                         default:
-                             alert("Esa opcion no la tenemos")
-                          break;
-                        }
-                   // }
-                }
+                let nombreHam = prompt('Como se llama el producto');
+                /*let panHam = prompt('Que tipo de pan lleva la Hamburguesas');
+                let carnesHam = prompt('cantidad de carnes de la Hamburguesas')
+                let ingredientesHam= prompt("Que otros ingredientes lleva la Hamburguesas")*/
+                let precioHam = prompt('Precio de la Hamburguesa')
+                crearHamburguesa(nombreHam, precioHam)
                 break;
             case 2:
-                alert(car);
+                verCarrito();
+            case 3:
+               
+                let productoABuscar=prompt('Que Hamburguesa desea agregar a su carrito');
+                 buscarPorNombre(productoABuscar);  
+            break;
+            case 4: 
+             verHamburguesas();
+                break;    
             case 5:
                 bandera=false;
              break;

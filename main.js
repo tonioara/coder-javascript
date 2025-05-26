@@ -4,22 +4,38 @@ let catalogoHamburguesas=[];
 let ingreso=false
 let bandera=true;
 let banderahambur=true;
-
+let banderaCatalogoBurguer=true
 let agregarCarrito;
 
 const user = 'tonioara'
 let cantidadDeIntentos = 3;
 
-function crearHamburguesa(nombreHam,/*panHam,carnesHam,ingredientesHam,*/ precioHam) {
-	const hamburAgregar = {
-		nombre: nombreHam,
-       /* panes: panHam,
-        carnes: carnesHam,
-        ingredientes: ingredientesHam,*/
-        precio: precioHam,
+function crearHamburguesa(nombreHam,panHam,carnesHam,ingredientesHam, precioHam) {
+    
+    if (isNaN(precioHam) || precioHam < 0 || precioHam === null || String(precioHam).trim() === ''){
+	
+	alert('Los datos ingresados son incorrectos, Porfavor ingrese los datos correctos ');
+    let nombreHam = prompt('Como se llama el producto');
+    let panHam = prompt('Que tipo de pan lleva la Hamburguesas');
+    let carnesHam = prompt('cantidad de carnes de la Hamburguesas')
+    let ingredientesHam= prompt("Que otros ingredientes lleva la Hamburguesas")
+    let precioHam = Number(prompt('Precio de la Hamburguesa'))
+    crearHamburguesa(nombreHam,panHam,carnesHam,ingredientesHam, precioHam)
 	}
+   else{
 
-	catalogoHamburguesas.push(hamburAgregar)
+    const hamburAgregar = {
+	    nombre: nombreHam,
+        panes: panHam,
+        carnes: carnesHam,
+        ingredientes: ingredientesHam,
+        precio: precioHam,    
+    
+     }
+
+    catalogoHamburguesas.push(hamburAgregar)
+    alert(`¡La hamburguesa "${nombreHam}" ha sido agregada con éxito!`);
+   } 
 }
 function verHamburguesas() {
 	if (catalogoHamburguesas.length == 0) {
@@ -31,7 +47,7 @@ function verHamburguesas() {
      let a=1;
 	for (let i = 0; i < catalogoHamburguesas.length; i++) {
        
-		mensaje += `\n${a++}) ${catalogoHamburguesas[i].nombre}- $ ${catalogoHamburguesas[i].precio}`
+		mensaje += `\n${a++}) ${catalogoHamburguesas[i].nombre} = \n *${catalogoHamburguesas[i].panes}* \n *${catalogoHamburguesas[i].carnes}* \n *${catalogoHamburguesas[i].ingredientes}  \n\n *$ ${catalogoHamburguesas[i].precio}`
 	}
 
 	alert(mensaje)
@@ -48,11 +64,22 @@ function buscarPorNombre(productoABuscar){
     const nombreProducto=nombresHamburguesas();
 
     let index= nombreProducto.indexOf(productoABuscar);
-    console.log(index);
+
     if(index=== -1){
         alert('Esta hamburguesa no esta en nuestro catalogo\n Por favor revise nuestro catalogo \n');
     }else{
         carrito.push(catalogoHamburguesas[index]);
+    }
+}
+function borrarHamburguesa(producotABorrar){
+    const aBorrar= nombresHamburguesas();
+    
+    let index= aBorrar.indexOf(producotABorrar);
+    if(index===-1){
+        alert('Esta hamburguesa no esta en nuestro catalogo\n Por favor revise nuestro catalogo');
+    }
+    else{
+        carrito.splice(index,1)
     }
 }
 
@@ -89,8 +116,32 @@ function checkUser(userLogin,userPassword){
     }
     return ingreso
 }
+function menuProductos(){
+    let op=Number(prompt('Bienvenido a nuestros Catalogo de productos !!\n\n Que opcion desea revisar: \n\n 1- Ver catalogo Hamburguesas \n 2- Borrar Producto del carrito \n 3- Ver Carrito \n 4- Ver otros productos \n 5- Salir "'))
+    return op;
+}
+function VerCatalogoHamburguesas(){
+    while(banderaCatalogoBurguer){
+        verHamburguesas();
+        let agregarHamburguesas= confirm('\n Desea Agregar una Hamburguesa a su carrito? \n')
+        alert(`VALOR DE CONFIRM ${agregarHamburguesas} `)
+        if(agregarHamburguesas===true){
+             
+             let productoABuscar=prompt('Que Hamburguesa desea agregar a su carrito');
+             buscarPorNombre(productoABuscar);
+             console.log(productoABuscar)
+        }
+        else{
+            
+            alert('Gracias por su compra');
+            banderaCatalogoBurguer=false;
+        }
+       
+    }
+    
+}
 function menu(){
-    let opMenu= Number(prompt("Bienvenido a BurguerHouse!! \n\n Elija la opcion que desea \n\n 1- Agregar hambuergas al catalogo \n 2- Ver Carrito \n 3-  Agregar Hamburguesas al carrito  \n 4 ver Catalogo de Hamburguesas-\n 5-Salir "));
+    let opMenu= Number(prompt("Bienvenido a BurguerHouse!! \n\n Elija la opcion que desea \n\n 1- Agregar hamburguesas al catalogo \n 2- Agregar Pizzas al catalogo de pizzas \n 3- Agregar otros productos a nuestro Catalogo \n 4- Ver nuestros productos\n 5- Salir "));
     alert(opMenu);
     return opMenu;
     
@@ -156,21 +207,48 @@ if(credencial){
         switch (opcionMenu) {
             case 1:
                 let nombreHam = prompt('Como se llama el producto');
-                /*let panHam = prompt('Que tipo de pan lleva la Hamburguesas');
+                let panHam = prompt('Que tipo de pan lleva la Hamburguesas');
                 let carnesHam = prompt('cantidad de carnes de la Hamburguesas')
-                let ingredientesHam= prompt("Que otros ingredientes lleva la Hamburguesas")*/
+                let ingredientesHam= prompt("Que otros ingredientes lleva la Hamburguesas")
                 let precioHam = prompt('Precio de la Hamburguesa')
-                crearHamburguesa(nombreHam, precioHam)
+                crearHamburguesa(nombreHam,panHam,carnesHam,ingredientesHam, precioHam)
                 break;
             case 2:
-                verCarrito();
+                let nombrePizza=prompt('Como se llama la pizza que deseas Agregar');
+                let precioPizza=Number(prompt('Cual es el precio de la pizza '))
+                crearPizzas(nombrePizza,precioPizza);
             case 3:
-               
-                let productoABuscar=prompt('Que Hamburguesa desea agregar a su carrito');
-                 buscarPorNombre(productoABuscar);  
+                agregarOtrosProductos();
             break;
             case 4: 
-             verHamburguesas();
+               ;
+               let banderaCatalogo=true;
+               while(banderaCatalogo){
+                let opcion= menuProductos()
+                switch(opcion){
+                     case 1:
+                        VerCatalogoHamburguesas(); 
+                      break;
+                     case 2:
+                        let EliminarProducto=confirm('Quieres elimnar una hamburguesa de su carrito')
+                        if (EliminarProducto){
+                            let productoABuscar=prompt('Ingrese el nombre del Producto que desea borrar')
+                            borrarHamburguesa(productoABuscar);
+                        }
+                         
+                      break;
+                     case 3:
+                        verCarrito();
+                      break;
+                      case 4:
+                        verOtrosProductos();
+                      case 5:
+                        banderaCatalogo=false;
+                      default:
+                     alert("Esa opcion no la tenemos")
+                      break;
+                }
+               }
                 break;    
             case 5:
                 bandera=false;
